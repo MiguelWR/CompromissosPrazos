@@ -4,6 +4,8 @@ document.getElementById('drop_zone').addEventListener('drop', handleFileSelect, 
 document.getElementById('fileInput2').addEventListener('change', handleFileSelect2);
 document.getElementById('drop_zone2').addEventListener('drop', handleFileSelect2, false);
 
+let timeOffset = 0;
+
 function handleFileSelect(event) {
     event.preventDefault();
     const file = event.target.files ? event.target.files[0] : event.dataTransfer.files[0];
@@ -92,12 +94,14 @@ document.getElementById('drop_zone2').addEventListener('dragover', function(even
 });
 
 function atualizarRelogio() {
-    const agora = new Date();
+    const agora = new Date(Date.now() + timeOffset);
     const horas = agora.getHours().toString().padStart(2, '0');
     const minutos = agora.getMinutes().toString().padStart(2, '0');
     const segundos = agora.getSeconds().toString().padStart(2, '0');
     document.getElementById('clock').textContent = `${horas}:${minutos}:${segundos}`;
 }
+
+setInterval(atualizarRelogio, 1000);
 
 setInterval(atualizarRelogio, 1000);
 
@@ -159,4 +163,32 @@ document.getElementById('scrollToggleButton').addEventListener('click', function
 window.addEventListener('resize', function() {
     stopScroll();
     startScroll();
+});
+document.getElementById('ajustarHoraButton').addEventListener('click', function() {
+    const agora = new Date(Date.now() + timeOffset);
+    const horaAtualFormatada = agora.getHours().toString().padStart(2, '0');
+    const minutoAtualFormatado = agora.getMinutes().toString().padStart(2, '0');
+
+    const horaCorretaInput = prompt("Digite a hora correta (formato HH:MM):", `${horaAtualFormatada}:${minutoAtualFormatado}`);
+
+    if (horaCorretaInput) {
+        const partes = horaCorretaInput.split(':');
+
+        if (partes.length === 2 && !isNaN(partes[0]) && !isNaN(partes[1])) {
+            const horas = parseInt(partes[0]);
+            const minutos = parseInt(partes[1]);
+
+            const dataCorreta = new Date();
+            dataCorreta.setHours(horas);
+            dataCorreta.setMinutes(minutos);
+            dataCorreta.setSeconds(0); 
+
+            const dataAtualSistema = new Date();
+            timeOffset = dataCorreta.getTime() - dataAtualSistema.getTime();
+
+            atualizarRelogio();
+        } else {
+            alert("Formato inválido. Por favor, use HH:MM.");
+        }
+    }
 });
