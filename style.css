@@ -333,3 +333,26 @@ body {
 .row2 p:nth-child(odd) {
     background-color: #f9f9f9;
 }
+#clock-background {
+    padding: 0 50px 0 110px;
+}
+#clock {
+    margin-right: 5px; 
+    z-index: 1;
+}
+#ajustarHoraButton {
+    background-color: #fff;
+    border: 1px solid #031539;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 16px;
+    z-index: 2; 
+    margin-left: 0px; 
+    padding: 0;
+    line-height: 30px;
+}
+#ajustarHoraButton:hover {
+    background-color: #eee;
+}
